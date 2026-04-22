@@ -1,266 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conceptly</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500&display=swap"
-        rel="stylesheet">
-   
-    <link rel="icon" sizes="32x32" type="image/png" href="tutor-logo.png  ">
-
-
-    <style>
-        :root {
-            --primary: #2d255e;
-            /* Sidebar purple */
-            --accent: #FFD166;
-            /* Highlight yellow */
-            --background: #FFFFFF;
-            /* Main chat background (white) */
-            --bot-bubble: #ECEBFF;
-            /* AI tutor bubble (light lavender) */
-            --user-bubble: #F1F3F4;
-            /* User bubble (light gray) */
-            --success: #3DDC97;
-            /* Correct/positive feedback green */
-            --error: #FF6B6B;
-            /* Error red */
-            --active: rgba(255, 255, 255, 0.08);
-        }
-
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "Inter", sans-serif;
-            background: var(--background);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .top-section {
-            flex-grow: 1;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: var(--primary);
-            color: white;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            /* force exact viewport height */
-            overflow: hidden;
-            /* prevent internal overflow */
-        }
-
-
-        .nav {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .nav-icon {
-            width: 25px;
-            height: 25px;
-            filter: brightness(0) invert(1);
-            opacity: 0.85;
-            transition: 0.2s ease;
-        }
-
-        .nav-item:hover .nav-icon {
-            opacity: 1;
-            transform: scale(1.08);
-        }
-
-        .nav-item:hover span {
-            opacity: 1;
-            transform: scale(1.08);
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .nav-item:hover {
-            background-color: var(--active);
-        }
-
-        .nav-item.active {
-            background-color: var(--active);
-        }
-
-        .nav-item {
-            margin-top: 20px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            /* space between icon and text */
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            box-shadow: inset 0 0 0 1px white;
-            /* white border around the icon */
-            border-radius: 8px;
-            padding: 1px;
-        }
-
-        .logo p {
-            position: relative;
-            /* required for ::before positioning */
-            font-family: "Poppins", sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .help-box {
-            margin: 20px 0;
-            width: 100%;
-            max-height: 100%;
-            border-radius: 12px;
-            object-fit: cover;
-            transition: transform 0.2s ease;
-            /* smooth hover effect */
-        }
-
-        .help-box:hover {
-            transform: scale(1.02);
-
-        }
-
-
-
-
-
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background-color: #3b2f70;
-            /* slightly lighter purple box */
-            padding: 12px;
-            border-radius: 19px;
-            margin-bottom: 30px;
-            margin-top: 0;
-        }
-
-        .profile-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid white;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-name {
-            font-family: "Poppins", sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conceptly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="tutor-logo.png">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary">
+      <div class="sidebar-top">
+        <a class="logo" href="#" aria-label="Conceptly home">
+          <img class="logo-mark" src="tutor-logo.png" alt="Conceptly logo">
+          <div class="logo-copy">
+            <span class="logo-title">Conceptly</span>
+            <span class="logo-subtitle">AI Tutor</span>
+          </div>
+        </a>
 
-        <div class="top-section">
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <a class="nav-item active" href="#">
+            <img src="chat-dots-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">New Doubt</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="messages-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Recent Chats</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="upload-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Uploads</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="history-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Saved Concepts</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="bookmark-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Bookmarks</span>
+          </a>
+        </nav>
+      </div>
 
-            <div class="logo">
-                <img class="logo-icon" src="tutor-logo.png">
-                <p>Conceptly AI Tutor</p>
-            </div>
-
-            <div class="nav">
-
-                <div class="nav-item">
-                    <img src="chat-dots-svgrepo-com.svg" class="nav-icon">
-                    <span>New Doubt</span>
-                </div>
-
-                <div class="nav-item">
-                    <img src="messages-svgrepo-com.svg" class="nav-icon">
-                    <span>Recent Chats</span>
-                </div>
-
-                <div class="nav-item">
-                    <img src="upload-svgrepo-com.svg" class="nav-icon">
-                    <span>Uploads</span>
-                </div>
-
-                <div class="nav-item">
-                    <img src="history-svgrepo-com.svg" class="nav-icon">
-                    <span>Saved Concepts</span>
-                </div>
-
-                <div class="nav-item">
-                    <img src="bookmark-svgrepo-com.svg" class="nav-icon">
-                    <span>Bookmarks</span>
-                </div>
-
-            </div>
-
+      <div class="help-card">
+        <img src="help.png" alt="Get help with Conceptly features">
+        <div class="help-copy">
+          <h2>Need a quick guide?</h2>
+          <p>Learn how to ask better questions and upload clearer snapshots for faster answers.</p>
         </div>
+      </div>
 
-        <img class="help-box" src="help.png">
+      <button class="profile-card" type="button" aria-label="Open profile">
+        <span class="avatar" aria-hidden="true">AH</span>
+        <span class="profile-meta">
+          <span class="profile-name">Aditi Hajela</span>
+          <span class="profile-role">Grade 11 | Science</span>
+        </span>
+      </button>
+    </aside>
 
-        <div class="profile">
-            <img src="alex-avatar.png" class="profile-avatar">
-            <div class="profile-info">
-                <p class="profile-name">Aditi Hajela</p>
-            </div>
+    <main class="main" aria-label="Chat workspace">
+      <section class="greeting" aria-label="Welcome">
+        <p class="eyebrow">Conceptly AI Tutor</p>
+        <h1>Learn deeply, ask freely, and grow with every concept.</h1>
+        <p class="subheading">Explain tough topics step-by-step, check your understanding, and keep momentum with guided follow-ups.</p>
+        <div class="feature-highlights" role="list" aria-label="Core features">
+          <span class="highlight-chip" role="listitem">Learn</span>
+          <span class="highlight-chip" role="listitem">Ask</span>
+          <span class="highlight-chip" role="listitem">Grow</span>
         </div>
+      </section>
 
-    </div>
+      <section class="chat-container" aria-label="Conversation">
+        <article class="chat-message bot-message">
+          <p class="message-label">Concept</p>
+          <h2 class="concept-title">Quadratic Equations by Factoring</h2>
+          <div class="message-body">
+            <p>Let's solve <strong>x^2 + 5x + 6 = 0</strong> by finding two numbers that multiply to 6 and add to 5.</p>
+            <ol class="step-list">
+              <li>Identify the pair: <strong>2</strong> and <strong>3</strong>.</li>
+              <li>Rewrite the expression: <strong>(x + 2)(x + 3) = 0</strong>.</li>
+              <li>Set each factor equal to zero: <strong>x = -2</strong> or <strong>x = -3</strong>.</li>
+            </ol>
+          </div>
+          <div class="suggestion-chips" aria-label="Suggested follow-ups">
+            <button class="chip" type="button">Explain step 2 again</button>
+            <button class="chip" type="button">Show graph intuition</button>
+            <button class="chip" type="button">Give a tougher problem</button>
+          </div>
+        </article>
 
-    <!-- MAIN CONTENT -->
-    <div class="main"> <!-- GREETING -->
-        <div class="greeting"> Hey Yash 👋<br> Let’s solve something today. </div> <!-- CHAT -->
-        <div class="chat-container"> <!-- USER MESSAGE -->
-            <div class="message user"> Solve this quadratic equation please. </div>
-            <div class="suggestions"> <span class="chip">Explain step 2 again</span> <span class="chip">Shortcut
-                    method</span> <span class="chip">Similar questions</span> <span class="chip">Create mini test</span>
-            </div>
-        </div>
-    </div> <!-- INPUT -->
-    <div class="input-area"> <label class="upload-btn"> 📎 <input type="file" hidden> </label> <input type="text"
-            placeholder="Snap or type your doubt here..."> <button class="send-btn">Send</button> </div>
-    </div>
+        <article class="chat-message user-message">
+          <div class="message-body">
+            <p>Can you also show me how to solve the same question using the quadratic formula?</p>
+          </div>
+        </article>
+      </section>
 
-
+      <form class="input-bar" action="#" method="post" aria-label="Message input">
+        <label class="icon-btn upload-btn" for="file-upload" aria-label="Upload file">
+          <img src="upload-svgrepo-com.svg" alt="" aria-hidden="true">
+        </label>
+        <input id="file-upload" type="file" hidden>
+        <input class="text-input" type="text" placeholder="Type your question or upload an image..." aria-label="Type your question">
+        <button class="send-btn" type="submit">Send</button>
+      </form>
+    </main>
+  </div>
 </body>
-
 </html>
