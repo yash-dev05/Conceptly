@@ -57,14 +57,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  justify-content: flex-start;
   border-right: 1px solid rgba(148, 163, 184, 0.2);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-top {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  flex: 0 1 auto;
   min-height: 0;
 }
 
@@ -143,19 +146,46 @@ body {
 }
 
 .help-card {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(191, 219, 254, 0.2);
-  padding: var(--space-3);
-  display: grid;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-3);
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.18),
+    inset 0 0 0 1px rgba(219, 234, 254, 0.08);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
 }
 
 .help-card img {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  max-width: 210px;
+  height: auto;
+  max-height: 190px;
+  object-fit: contain;
+  object-position: center;
   border-radius: var(--radius-md);
+  margin-inline: auto;
+  flex-shrink: 0;
+}
+
+.help-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(191, 219, 254, 0.36);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 14px 28px rgba(15, 23, 42, 0.22),
+    0 0 0 1px rgba(147, 197, 253, 0.26);
 }
 
 .help-copy h2 {
@@ -460,12 +490,19 @@ body {
   }
 
   .help-card {
-    padding: 8px;
+    padding: 10px;
     width: 100%;
+    gap: 0;
+    border-radius: var(--radius-md);
   }
 
   .help-card img {
-    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 56px;
+    max-height: 56px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 10px;
   }
 
   .profile-card {
