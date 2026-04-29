@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conceptly</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet"> 
   <link rel="icon" type="image/png" sizes="32x32" href="tutor-logo.png">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -27,11 +27,11 @@
             <img src="chat-dots-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
             <span class="nav-label">New Doubt</span>
           </a>
-          <a class="nav-item" href="#">
+          <a class="nav-item" href="recent.html">
             <img src="messages-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
             <span class="nav-label">Recent Chats</span>
           </a>
-          <a class="nav-item" href="#">
+          <a class="nav-item" href="uploads.html">
             <img src="upload-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
             <span class="nav-label">Uploads</span>
           </a>
@@ -111,5 +111,87 @@
       </form>
     </main>
   </div>
+
+
+  <script>
+const form = document.querySelector(".input-bar");
+const textInput = document.querySelector(".text-input");
+const fileInput = document.querySelector("#file-upload");
+const chatContainer = document.querySelector(".chat-container");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const question = textInput.value.trim();
+  const image = fileInput.files[0];
+
+  if (!question && !image) return;
+
+  // Show user message immediately
+  addUserMessage(question);
+
+  const formData = new FormData();
+  if (question) formData.append("question", question);
+  if (image) formData.append("image", image);
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/ask", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.answer) {
+      addBotMessage(data.answer);
+    } else {
+      addBotMessage("⚠️ No response from AI.");
+    }
+
+  } catch (error) {
+    console.error(error);
+    addBotMessage("⚠️ Backend connection failed.");
+  }
+
+  textInput.value = "";
+  fileInput.value = "";
+});
+
+function addUserMessage(text) {
+  if (!text) return;
+
+  const msg = document.createElement("article");
+  msg.className = "chat-message user-message";
+
+  msg.innerHTML = `
+    <div class="message-body">
+      <p>${text}</p>
+    </div>
+  `;
+
+  chatContainer.appendChild(msg);
+  scrollToBottom();
+}
+
+function addBotMessage(text) {
+  const msg = document.createElement("article");
+  msg.className = "chat-message bot-message";
+
+  msg.innerHTML = `
+    <div class="message-body">
+      <p>${text}</p>
+    </div>
+  `;
+
+  chatContainer.appendChild(msg);
+  scrollToBottom();
+}
+
+function scrollToBottom() {
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+</script>
+
+
 </body>
 </html>

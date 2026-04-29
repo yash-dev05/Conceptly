@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conceptly | Recent Chats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="tutor-logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .recent-header {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: clamp(18px, 2.4vw, 32px);
+    }
+
+    .recent-header h1 {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-size: clamp(1.28rem, 2.1vw, 2rem);
+      line-height: 1.25;
+    }
+
+    .recent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+      align-content: start;
+    }
+
+    .recent-card {
+      text-decoration: none;
+      color: inherit;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+      cursor: pointer;
+    }
+
+    .recent-card.chat-message {
+      max-width: 100%;
+      background: linear-gradient(155deg, var(--surface) 0%, #f8fbff 100%);
+    }
+
+    .recent-card:hover {
+      transform: translateY(-3px);
+      border-color: #93c5fd;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(147, 197, 253, 0.35);
+      background: linear-gradient(155deg, #ffffff 0%, #eef5ff 100%);
+    }
+
+    .recent-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .recent-subject {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #0b4bb3;
+      background: linear-gradient(120deg, #e0e7ff, #dbeafe);
+      line-height: 1;
+    }
+
+    .recent-time {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .recent-badges {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .recent-empty {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: var(--space-8);
+    }
+
+    .empty-card {
+      width: min(560px, 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(155deg, #ffffff 0%, #f3f8ff 100%);
+      box-shadow: var(--shadow-sm);
+      padding: clamp(22px, 3vw, 36px);
+    }
+
+    .empty-visual {
+      width: 100%;
+      max-width: 180px;
+      height: 120px;
+      margin: 0 auto var(--space-4);
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at 25% 25%, #dbeafe 0%, #eff6ff 50%, #ffffff 100%);
+      border: 1px solid #dbeafe;
+      box-shadow: inset 0 0 0 1px rgba(191, 219, 254, 0.4);
+    }
+
+    .empty-card h2 {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-size: 1.2rem;
+    }
+
+    .empty-card p {
+      margin: var(--space-3) 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .empty-card .send-btn {
+      margin-top: var(--space-5);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 980px) {
+      .recent-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary">
+      <div class="sidebar-top">
+        <a class="logo" href="index.html" aria-label="Conceptly home">
+          <img class="logo-mark" src="tutor-logo.png" alt="Conceptly logo">
+          <div class="logo-copy">
+            <span class="logo-title">Conceptly</span>
+            <span class="logo-subtitle">AI Tutor</span>
+          </div>
+        </a>
+
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <a class="nav-item" href="index.html">
+            <img src="chat-dots-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">New Doubt</span>
+          </a>
+          <a class="nav-item active" href="recent.html">
+            <img src="messages-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Recent Chats</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="upload-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Uploads</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="history-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Saved Concepts</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="bookmark-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Bookmarks</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="help-card">
+        <img src="help.png" alt="Get help with Conceptly features">
+        <div class="help-copy">
+          <h2>Need a quick guide?</h2>
+          <p>Learn how to ask better questions and upload clearer snapshots for faster answers.</p>
+        </div>
+      </div>
+
+      <button class="profile-card" type="button" aria-label="Open profile">
+        <span class="avatar" aria-hidden="true">AH</span>
+        <span class="profile-meta">
+          <span class="profile-name">Aditi Hajela</span>
+          <span class="profile-role">Grade 11 | Science</span>
+        </span>
+      </button>
+    </aside>
+
+    <main class="main" aria-label="Recent chats workspace">
+      <header class="recent-header" aria-label="Recent conversations header">
+        <p class="eyebrow">Conceptly AI Tutor</p>
+        <h1>Recent Conversations</h1>
+        <p class="subheading">Continue where you left off or revisit concepts you've already learned.</p>
+      </header>
+
+      <section class="chat-container" aria-label="Recent conversation list">
+        <div class="recent-grid" role="list" aria-label="Recent chat cards">
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Quadratic Equations by Factoring">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Quadratic Equations by Factoring</h2>
+            <div class="message-body">
+              <p>Solved step-by-step factorization example and compared with quadratic formula.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Mathematics</span>
+              <span class="recent-time">Last opened 2 hours ago</span>
+            </div>
+            <div class="recent-badges">
+              <span class="chip">Difficulty: Medium</span>
+            </div>
+          </a>
+
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Projectile Motion Practice Set">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Projectile Motion Practice Set</h2>
+            <div class="message-body">
+              <p>Reviewed launch angles, time of flight, and range using real-world examples.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Physics</span>
+              <span class="recent-time">Last opened yesterday</span>
+            </div>
+            <div class="recent-badges">
+              <span class="chip">Difficulty: Hard</span>
+            </div>
+          </a>
+
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Mole Concept Revision">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Mole Concept Revision</h2>
+            <div class="message-body">
+              <p>Converted grams to moles and practiced Avogadro-based particle calculations.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Chemistry</span>
+              <span class="recent-time">Last opened 3 days ago</span>
+            </div>
+          </a>
+
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Trigonometric Identities Drill">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Trigonometric Identities Drill</h2>
+            <div class="message-body">
+              <p>Simplified identity expressions and learned a faster substitution strategy.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Mathematics</span>
+              <span class="recent-time">Last opened 1 week ago</span>
+            </div>
+            <div class="recent-badges">
+              <span class="chip">Difficulty: Medium</span>
+            </div>
+          </a>
+
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Electrochemistry Basics">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Electrochemistry Basics</h2>
+            <div class="message-body">
+              <p>Understood galvanic cells, anode-cathode flow, and oxidation-reduction pairs.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Chemistry</span>
+              <span class="recent-time">Last opened 9 days ago</span>
+            </div>
+          </a>
+
+          <a class="recent-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open chat: Newton's Laws Concept Check">
+            <p class="message-label">Recent</p>
+            <h2 class="concept-title">Newton's Laws Concept Check</h2>
+            <div class="message-body">
+              <p>Worked through free-body diagrams with friction and tension force questions.</p>
+            </div>
+            <div class="recent-meta">
+              <span class="recent-subject">Physics</span>
+              <span class="recent-time">Last opened 2 weeks ago</span>
+            </div>
+            <div class="recent-badges">
+              <span class="chip">Difficulty: Easy</span>
+            </div>
+          </a>
+        </div>
+
+        <section class="recent-empty" aria-label="No recent chats" hidden>
+          <article class="empty-card">
+            <div class="empty-visual" aria-hidden="true"></div>
+            <h2>No recent chats yet</h2>
+            <p>Start asking questions to build your learning history.</p>
+            <a class="send-btn" href="index.html">Start New Doubt</a>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

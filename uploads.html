@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conceptly | Uploads</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="tutor-logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .uploads-header {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: clamp(18px, 2.4vw, 32px);
+    }
+
+    .uploads-header h1 {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-size: clamp(1.28rem, 2.1vw, 2rem);
+      line-height: 1.25;
+    }
+
+    .uploads-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-4);
+      align-content: start;
+    }
+
+    .upload-card {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+    }
+
+    .upload-card.chat-message {
+      max-width: 100%;
+      background: linear-gradient(155deg, var(--surface) 0%, #f8fbff 100%);
+      padding: var(--space-4);
+    }
+
+    .upload-card:hover {
+      transform: translateY(-3px);
+      border-color: #93c5fd;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(147, 197, 253, 0.35);
+      background: linear-gradient(155deg, #ffffff 0%, #eef5ff 100%);
+    }
+
+    .upload-preview {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border: 1px solid #dbeafe;
+      background: #eff6ff;
+    }
+
+    .upload-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 220ms ease;
+    }
+
+    .upload-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 0.84rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 10%, rgba(15, 23, 42, 0.48) 100%);
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .upload-card:hover .upload-preview img {
+      transform: scale(1.04);
+    }
+
+    .upload-card:hover .upload-overlay {
+      opacity: 1;
+    }
+
+    .upload-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .upload-subject {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #0b4bb3;
+      background: linear-gradient(120deg, #e0e7ff, #dbeafe);
+      line-height: 1;
+    }
+
+    .upload-time {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .upload-title {
+      margin: var(--space-3) 0 0;
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .upload-description {
+      margin: var(--space-2) 0 0;
+      color: #1e293b;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .upload-action {
+      margin-top: var(--space-4);
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .upload-card:hover .upload-action {
+      background: #eaf2ff;
+      border-color: #93c5fd;
+      color: #0f172a;
+    }
+
+    .uploads-empty {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: var(--space-8);
+    }
+
+    .empty-card {
+      width: min(560px, 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(155deg, #ffffff 0%, #f3f8ff 100%);
+      box-shadow: var(--shadow-sm);
+      padding: clamp(22px, 3vw, 36px);
+    }
+
+    .empty-visual {
+      width: 100%;
+      max-width: 180px;
+      height: 120px;
+      margin: 0 auto var(--space-4);
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at 25% 25%, #dbeafe 0%, #eff6ff 50%, #ffffff 100%);
+      border: 1px solid #dbeafe;
+      box-shadow: inset 0 0 0 1px rgba(191, 219, 254, 0.4);
+    }
+
+    .empty-card h2 {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-size: 1.2rem;
+    }
+
+    .empty-card p {
+      margin: var(--space-3) 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .empty-card .send-btn {
+      margin-top: var(--space-5);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 1024px) {
+      .uploads-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .uploads-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary">
+      <div class="sidebar-top">
+        <a class="logo" href="index.html" aria-label="Conceptly home">
+          <img class="logo-mark" src="tutor-logo.png" alt="Conceptly logo">
+          <div class="logo-copy">
+            <span class="logo-title">Conceptly</span>
+            <span class="logo-subtitle">AI Tutor</span>
+          </div>
+        </a>
+
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <a class="nav-item" href="index.html">
+            <img src="chat-dots-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">New Doubt</span>
+          </a>
+          <a class="nav-item" href="recent.html">
+            <img src="messages-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Recent Chats</span>
+          </a>
+          <a class="nav-item active" href="uploads.html">
+            <img src="upload-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Uploads</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="history-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Saved Concepts</span>
+          </a>
+          <a class="nav-item" href="#">
+            <img src="bookmark-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
+            <span class="nav-label">Bookmarks</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="help-card">
+        <img src="help.png" alt="Get help with Conceptly features">
+        <div class="help-copy">
+          <h2>Need a quick guide?</h2>
+          <p>Learn how to ask better questions and upload clearer snapshots for faster answers.</p>
+        </div>
+      </div>
+
+      <button class="profile-card" type="button" aria-label="Open profile">
+        <span class="avatar" aria-hidden="true">AH</span>
+        <span class="profile-meta">
+          <span class="profile-name">Aditi Hajela</span>
+          <span class="profile-role">Grade 11 | Science</span>
+        </span>
+      </button>
+    </aside>
+
+    <main class="main" aria-label="Uploads workspace">
+      <header class="uploads-header" aria-label="Uploaded questions header">
+        <p class="eyebrow">Conceptly AI Tutor</p>
+        <h1>Uploaded Questions</h1>
+        <p class="subheading">Revisit previously uploaded snapshots and continue solving step-by-step.</p>
+      </header>
+
+      <section class="chat-container" aria-label="Upload history list">
+        <div class="uploads-grid" role="list" aria-label="Uploaded question cards">
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Quadratic equation worksheet">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=80" alt="Mathematics worksheet with quadratic equations">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Mathematics</span>
+                <span class="upload-time">Uploaded yesterday</span>
+              </div>
+              <h2 class="upload-title">Quadratic Equation Worksheet</h2>
+              <p class="upload-description">Factoring-based problem set from class revision notebook.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Newton's laws force diagram">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80" alt="Physics question showing force vectors and free body diagram">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Physics</span>
+                <span class="upload-time">Uploaded 2 days ago</span>
+              </div>
+              <h2 class="upload-title">Newton's Laws Force Diagram</h2>
+              <p class="upload-description">Friction and tension based diagram from assignment sheet.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Mole concept conversion numericals">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1554475901-4538ddfbccc2?auto=format&fit=crop&w=1200&q=80" alt="Chemistry notes with mole concept numerical questions">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Chemistry</span>
+                <span class="upload-time">Uploaded 4 days ago</span>
+              </div>
+              <h2 class="upload-title">Mole Concept Numericals</h2>
+              <p class="upload-description">Mass-to-mole conversion practice from chemistry workbook.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Cell division labeled diagram">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1530210124550-912dc1381cb8?auto=format&fit=crop&w=1200&q=80" alt="Biology textbook page showing cell division stages">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Biology</span>
+                <span class="upload-time">Uploaded 1 week ago</span>
+              </div>
+              <h2 class="upload-title">Cell Division Labeled Diagram</h2>
+              <p class="upload-description">Doubt around mitosis phases and chromosome movement.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Trigonometry identity challenge">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80" alt="Mathematics notebook showing trigonometric identity problem">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Mathematics</span>
+                <span class="upload-time">Uploaded 9 days ago</span>
+              </div>
+              <h2 class="upload-title">Trigonometric Identity Challenge</h2>
+              <p class="upload-description">Simplification-based identity from competitive prep mock test.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+
+          <a class="upload-card chat-message bot-message" href="index.html" role="listitem" aria-label="Open uploaded question: Chemical equilibrium table">
+            <article>
+              <div class="upload-preview">
+                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" alt="Chemistry equilibrium question table with concentrations">
+                <div class="upload-overlay">View Question</div>
+              </div>
+              <div class="upload-meta">
+                <span class="upload-subject">Chemistry</span>
+                <span class="upload-time">Uploaded 2 weeks ago</span>
+              </div>
+              <h2 class="upload-title">Chemical Equilibrium Table</h2>
+              <p class="upload-description">ICE table balancing and equilibrium constant calculation doubt.</p>
+              <span class="upload-action">Reopen in Chat</span>
+            </article>
+          </a>
+        </div>
+
+        <section class="uploads-empty" aria-label="No uploads" hidden>
+          <article class="empty-card">
+            <div class="empty-visual" aria-hidden="true"></div>
+            <h2>No uploads yet</h2>
+            <p>Upload a snapshot of your question to start learning faster.</p>
+            <a class="send-btn" href="index.html">Upload Question</a>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
