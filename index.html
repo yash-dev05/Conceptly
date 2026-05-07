@@ -35,14 +35,11 @@
             <img src="upload-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
             <span class="nav-label">Uploads</span>
           </a>
-          <a class="nav-item" href="#">
+          <a class="nav-item" href="saved.html">
             <img src="history-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
             <span class="nav-label">Saved Concepts</span>
           </a>
-          <a class="nav-item" href="#">
-            <img src="bookmark-svgrepo-com.svg" class="nav-icon" alt="" aria-hidden="true">
-            <span class="nav-label">Bookmarks</span>
-          </a>
+              
         </nav>
       </div>
 
@@ -112,12 +109,133 @@
     </main>
   </div>
 
+  <div class="profile-modal-overlay" id="profile-modal-overlay" hidden>
+    <section
+      class="profile-modal"
+      id="profile-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="profile-modal-title"
+      tabindex="-1"
+    >
+      <button class="profile-modal-close" id="profile-modal-close" type="button" aria-label="Close profile panel">&times;</button>
+
+      <header class="profile-modal-header">
+        <span class="profile-modal-avatar" aria-hidden="true">AH</span>
+        <div class="profile-modal-user">
+          <h2 id="profile-modal-title">Aditi Hajela</h2>
+          <a href="mailto:aditi@email.com">aditi@email.com</a>
+        </div>
+      </header>
+
+      <section class="profile-modal-details" aria-label="User details">
+        <div class="detail-row">
+          <p class="detail-label">Class</p>
+          <p class="detail-value">Grade 11 Science</p>
+        </div>
+        <div class="detail-row">
+          <p class="detail-label">Target exam</p>
+          <p class="detail-value">JEE + Boards</p>
+        </div>
+        <div class="detail-row">
+          <p class="detail-label">Learning focus</p>
+          <p class="detail-value">Math and Physics</p>
+        </div>
+        <div class="detail-row">
+          <p class="detail-label">Account type</p>
+          <p class="detail-value">Pro</p>
+        </div>
+      </section>
+
+      <section class="profile-modal-actions" aria-label="Quick actions">
+        <button class="send-btn" type="button">Edit Profile</button>
+        <button class="send-btn" type="button">View Progress</button>
+        <button class="send-btn" type="button">Logout</button>
+      </section>
+    </section>
+  </div>
+
 
   <script>
 const form = document.querySelector(".input-bar");
 const textInput = document.querySelector(".text-input");
 const fileInput = document.querySelector("#file-upload");
 const chatContainer = document.querySelector(".chat-container");
+const profileCard = document.querySelector(".profile-card");
+const profileModalOverlay = document.querySelector("#profile-modal-overlay");
+const profileModal = document.querySelector("#profile-modal");
+const profileModalClose = document.querySelector("#profile-modal-close");
+let lastFocusedElement = null;
+
+function getFocusableElements() {
+  return profileModal.querySelectorAll(
+    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+  );
+}
+
+function openProfileModal() {
+  lastFocusedElement = document.activeElement;
+  profileModalOverlay.hidden = false;
+  requestAnimationFrame(() => {
+    profileModalOverlay.classList.add("open");
+  });
+  document.body.style.overflow = "hidden";
+  const focusable = getFocusableElements();
+  (focusable[0] || profileModal).focus();
+}
+
+function closeProfileModal() {
+  profileModalOverlay.classList.remove("open");
+  profileModalOverlay.classList.add("closing");
+  const handleCloseEnd = () => {
+    profileModalOverlay.hidden = true;
+    profileModalOverlay.classList.remove("closing");
+    profileModalOverlay.removeEventListener("animationend", handleCloseEnd);
+  };
+  profileModalOverlay.addEventListener("animationend", handleCloseEnd);
+  document.body.style.overflow = "";
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
+
+profileCard.addEventListener("click", openProfileModal);
+profileModalClose.addEventListener("click", closeProfileModal);
+
+profileModalOverlay.addEventListener("click", (event) => {
+  if (event.target === profileModalOverlay) {
+    closeProfileModal();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (profileModalOverlay.hidden) return;
+
+  if (event.key === "Escape") {
+    closeProfileModal();
+    return;
+  }
+
+  if (event.key === "Tab") {
+    const focusable = getFocusableElements();
+    if (!focusable.length) {
+      event.preventDefault();
+      profileModal.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
